@@ -24,7 +24,14 @@ class App {
     const { video, canvas, asciiImage, captureButton } = this.ELEMENTS;
     video.width = this.RESOLUTION.VIDEO.width;
     video.height = this.RESOLUTION.VIDEO.height;
-    video.srcObject = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+    try {
+      video.srcObject = await navigator.mediaDevices.getUserMedia({
+        video: true,
+        audio: false,
+      });
+    } catch (e) {
+      console.error(e);
+    }
     video.play();
 
     canvas.width = this.RESOLUTION.CANVAS.width;
@@ -57,7 +64,7 @@ class App {
     const width = this.RESOLUTION.CANVAS.width;
     const height = this.RESOLUTION.CANVAS.height;
 
-    const ctx = canvas.getContext('2d')!;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true })!;
     ctx.drawImage(video, 0, 0, video.width, video.height, 0, 0, width, height);
 
     const { data } = ctx.getImageData(0, 0, width, height);
