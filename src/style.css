@@ -71,9 +71,12 @@
   -moz-transform: rotateY(180deg); /* Firefox */
 }
 
-#capture-button {
+button {
   padding: 0.5rem 1rem;
   max-width: 10rem;
+}
+#capture-button {
+  display: none;
 }
 
 @media only screen and (max-width: 768px) {

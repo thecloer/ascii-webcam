@@ -11,17 +11,17 @@ class App {
     canvas: document.createElement('canvas') as HTMLCanvasElement,
     asciiImage: document.getElementById('ascii-image') as HTMLDivElement,
     captureButton: document.getElementById('capture-button') as HTMLButtonElement,
+    startButton: document.getElementById('start-button') as HTMLButtonElement,
   } as const;
 
   private animationId = -1;
 
   constructor() {
     this.init();
-    this.startAnimation();
   }
 
   async init() {
-    const { video, canvas, asciiImage, captureButton } = this.ELEMENTS;
+    const { video, canvas, asciiImage, captureButton, startButton } = this.ELEMENTS;
     video.width = this.RESOLUTION.VIDEO.width;
     video.height = this.RESOLUTION.VIDEO.height;
     try {
@@ -32,13 +32,23 @@ class App {
     } catch (e) {
       console.error(e);
     }
-    video.play();
 
     canvas.width = this.RESOLUTION.CANVAS.width;
     canvas.height = this.RESOLUTION.CANVAS.height;
     const ctx = canvas.getContext('2d')!;
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
+
+    startButton.addEventListener('click', async () => {
+      try {
+        await video.play();
+        this.startAnimation();
+        captureButton.style.display = 'block';
+        startButton.style.display = 'none';
+      } catch (e) {
+        console.error('Failed to play video:', e);
+      }
+    });
 
     captureButton.addEventListener('click', () => {
       if (this.animationId === -1) return this.startAnimation();
